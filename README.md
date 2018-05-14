@@ -3,7 +3,7 @@
 This is fork version of [craftpip/process-handler](https://github.com/craftpip/process-handler).
 
 
-Get list of running processes by name or pid, supports windows and unix
+Get list of running processes by name or pid, supports windows and unix, macOS
   
 I struggled to find a library that returns the processes list for the operating system.
 My use case was to find if my spawned process was running or not.
@@ -88,7 +88,19 @@ $processFinder->isRunning($pid);
 
 ## Installation
 
-Coming soon
+Run the composer command 
+```cmd
+composer require mozartk/process-finder
+```
+
+ProcessFinder can be installed with Composer by adding the library as a dependency to your composer.json file.
+```json
+{
+    "require": {
+        "mozartk/process-finder": "~1.0"
+    }
+}
+```
 
 
 ## Copyright and license
