@@ -3,6 +3,7 @@
 namespace mozartk\ProcessFinder;
 
 use mozartk\ProcessFinder\Drivers\DriversInterface;
+use mozartk\ProcessFinder\Drivers\MacOS;
 use mozartk\ProcessFinder\Drivers\Unix;
 use mozartk\ProcessFinder\Drivers\Windows;
 use mozartk\ProcessFinder\Exception\ProcessFinderException;
@@ -18,6 +19,7 @@ class ProcessFinder {
      */
     public $api;
 
+    const systemMacOS = "MacOS";
     const systemWindows = "Win";
     const systemUnix = "Unix";
 
@@ -33,12 +35,18 @@ class ProcessFinder {
      */
     public function __construct ($pid = null) {
         $this->pid = $pid;
-        $this->operatingSystem = $this->isWindows() ? self::systemWindows : self::systemUnix;
+        $this->operatingSystem = $this->getCurrentOS();
 
-        if ($this->operatingSystem == self::systemWindows) {
-            $this->api = new Windows();
-        } else {
-            $this->api = new Unix();
+        switch($this->operatingSystem){
+            case self::systemMacOS:
+                $this->api = new MacOS();
+                break;
+            case self::systemWindows:
+                $this->api = new Windows();
+                break;
+            case self::systemUnix:
+                $this->api = new Unix();
+                break;
         }
 
         return $this->api;
@@ -97,8 +105,18 @@ class ProcessFinder {
         return !$process ? false : true;
     }
 
-    private function isWindows () {
-        return !(strpos(PHP_OS, 'WIN') === false);
+    /**
+     * Returns a current OS systems string using uname.
+     * You can find a list of uname strings :
+     * https://en.wikipedia.org/wiki/Uname#Table_of_standard_uname_output
+     *
+     * @return string
+     */
+    private function getCurrentOS () {
+        switch (true) {
+            case stristr(PHP_OS, 'DAR'): return self::systemMacOS;
+            case stristr(PHP_OS, 'WIN'): return self::systemWindows;
+            default : return self::systemUnix;
+        }
     }
-
 }

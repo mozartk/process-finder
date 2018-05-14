@@ -3,6 +3,7 @@
 namespace mozartk\ProcessFinder;
 
 use mozartk\ProcessFinder\Drivers\DriversInterface;
+use mozartk\ProcessFinder\Drivers\MacOS;
 use mozartk\ProcessFinder\Drivers\Unix;
 use mozartk\ProcessFinder\Drivers\Windows;
 use mozartk\ProcessFinder\Exception\ProcessFinderException;
@@ -56,7 +57,8 @@ class Process {
      * @return bool
      */
     public function isRunning () {
-        return (new ProcessFinder())->isRunning($this->getPid());
+        $process = new ProcessFinder();
+        return $process->isRunning($this->getPid());
     }
 
     /**
