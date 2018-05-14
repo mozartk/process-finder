@@ -8,12 +8,35 @@ use PHPUnit\Framework\TestCase;
 
 class ProcessCheckerTest extends TestCase
 {
+
+
+    /**
+     * return Process instance with php result
+     *
+     * @return bool|\mozartk\ProcessFinder\Process
+     */
+    private function getPHPProcess()
+    {
+        $processFinder = new ProcessFinder();
+        $process = $processFinder->getAllProcesses();
+
+        $pattern = '/php/';
+        $pid = "";
+
+        foreach ($process as $p) {
+            if (preg_match($pattern, $p->getName())) {
+                return $p;
+            }
+        }
+
+        return false;
+    }
+
     public function testGetProcess()
     {
         $processFinder = new ProcessFinder();
-        $process = new Process('wait 5');
-        $process->start();
-        $pid = $process->getPid();
+        $p = $this->getPHPProcess();
+        $pid = $p->getPid();
 
         $process = $processFinder->getProcess($pid);
         $this->assertEquals($pid, $process->getPid());
@@ -55,28 +78,6 @@ class ProcessCheckerTest extends TestCase
                 break;
             }
         }
-    }
-
-    /**
-     * return Process instance with php result
-     *
-     * @return bool|\mozartk\ProcessFinder\Process
-     */
-    private function getPHPProcess()
-    {
-        $processFinder = new ProcessFinder();
-        $process = $processFinder->getAllProcesses();
-
-        $pattern = '/php/';
-        $pid = "";
-
-        foreach ($process as $p) {
-            if (preg_match($pattern, $p->getName())) {
-                return $p;
-            }
-        }
-
-        return false;
     }
 
     public function testIsNotRunning()
