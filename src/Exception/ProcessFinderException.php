@@ -2,6 +2,6 @@
 
 namespace mozartk\ProcessFinder\Exception;
 
-class ProcessFinderException extends \Exception {
-
+class ProcessFinderException extends \Exception
+{
 }

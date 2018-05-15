@@ -2,16 +2,19 @@
 
 namespace mozartk\ProcessFinder\Drivers;
 
-interface DriversInterface {
+interface DriversInterface
+{
     /**
      * @return \mozartk\ProcessFinder\Process[]
      */
-    function getAllProcesses ();
+    public function getAllProcesses();
 
     /**
      * @param $pid
      *
      * @return \mozartk\ProcessFinder\Process[]
      */
-    function getProcessByPid ($pid);
+    public function getProcessByPid($pid);
+
+    public function parse($result);
 }
