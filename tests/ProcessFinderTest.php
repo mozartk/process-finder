@@ -148,4 +148,16 @@ class ProcessCheckerTest extends TestCase
         $processFinder = new ProcessFinder();
         $processFinder->getProcess();
     }
+
+    /**
+     * @expectedException \mozartk\ProcessFinder\Exception\NotExistsDriversException
+     */
+    public function testNotExistOS()
+    {
+        $processFinder = new ProcessFinder();
+        $ref = new \ReflectionClass(get_class($processFinder));
+        $method = $ref->getMethod("loadDrivers");
+        $method->setAccessible(true);
+        $method->invokeArgs($processFinder, array("OsDoesNotExistIntheWorld"));
+    }
 }

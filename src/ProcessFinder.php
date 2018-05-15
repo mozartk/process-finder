@@ -7,8 +7,10 @@ use mozartk\ProcessFinder\Drivers\MacOS;
 use mozartk\ProcessFinder\Drivers\Unix;
 use mozartk\ProcessFinder\Drivers\Windows;
 use mozartk\ProcessFinder\Exception\ProcessFinderException;
+use mozartk\ProcessFinder\Exception\NotExistsDriversException;
 
-class ProcessFinder {
+class ProcessFinder
+{
     /**
      * @var string
      */
@@ -19,8 +21,10 @@ class ProcessFinder {
      */
     public $api;
 
+    const DRIVERS_NAMESPACE = "\\mozartk\\ProcessFinder\\Drivers\\";
+
     const systemMacOS = "MacOS";
-    const systemWindows = "Win";
+    const systemWindows = "Windows";
     const systemUnix = "Unix";
 
     /**
@@ -33,23 +37,24 @@ class ProcessFinder {
      *
      * @param $pid
      */
-    public function __construct ($pid = null) {
+    public function __construct($pid = null)
+    {
         $this->pid = $pid;
         $this->operatingSystem = $this->getCurrentOS();
-
-        switch($this->operatingSystem){
-            case self::systemMacOS:
-                $this->api = new MacOS();
-                break;
-            case self::systemWindows:
-                $this->api = new Windows();
-                break;
-            case self::systemUnix:
-                $this->api = new Unix();
-                break;
-        }
+        $this->api = $this->loadDrivers($this->operatingSystem);
 
         return $this->api;
+    }
+
+    private function loadDrivers($os)
+    {
+        $className = self::DRIVERS_NAMESPACE.$os;
+        $result = class_exists($className);
+        if ($result === false) {
+            throw new NotExistsDriversException("Driver ClassName does not exist.");
+        }
+
+        return new $className();
     }
 
     /**
@@ -57,7 +62,8 @@ class ProcessFinder {
      *
      * @return $this
      */
-    public function setPid ($pid) {
+    public function setPid($pid)
+    {
         $this->pid = $pid;
 
         return $this;
@@ -72,12 +78,15 @@ class ProcessFinder {
      * @return \mozartk\ProcessFinder\Process|boolean
      * @throws \mozartk\ProcessFinder\Exception\ProcessFinderException
      */
-    public function getProcess ($pid = null) {
-        if (is_null($pid))
+    public function getProcess($pid = null)
+    {
+        if (is_null($pid)) {
             $pid = $this->pid;
+        }
 
-        if (is_null($pid))
+        if (is_null($pid)) {
             throw new ProcessFinderException('Pid is required');
+        }
 
         $process = $this->api->getProcessByPid($pid);
 
@@ -90,7 +99,8 @@ class ProcessFinder {
      *
      * @return \mozartk\ProcessFinder\Process[]
      */
-    public function getAllProcesses () {
+    public function getAllProcesses()
+    {
         return $this->api->getAllProcesses();
     }
 
@@ -99,7 +109,8 @@ class ProcessFinder {
      *
      * @return bool
      */
-    public function isRunning ($pid = null) {
+    public function isRunning($pid = null)
+    {
         $process = $this->getProcess($pid);
 
         return !$process ? false : true;
@@ -112,11 +123,12 @@ class ProcessFinder {
      *
      * @return string
      */
-    private function getCurrentOS () {
+    private function getCurrentOS()
+    {
         switch (true) {
-            case stristr(PHP_OS, 'DAR'): return self::systemMacOS;
-            case stristr(PHP_OS, 'WIN'): return self::systemWindows;
-            default : return self::systemUnix;
+            case mb_stristr(PHP_OS, 'DAR'): return self::systemMacOS;
+            case mb_stristr(PHP_OS, 'WIN'): return self::systemWindows;
+            default: return self::systemUnix;
         }
     }
 }
