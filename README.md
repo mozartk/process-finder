@@ -2,6 +2,7 @@
 <p align="left">
 <a href="https://travis-ci.org/mozartk/process-finder?branch=master"><img src="https://travis-ci.org/mozartk/process-finder.svg?branch=master" alt="Build Status"></a>
 <a href='https://travis-ci.org/mozartk/process-finder?branch=master'><img src="https://img.shields.io/travis/php-v/mozartk/process-finder.svg"></a>
+<a href='https://coveralls.io/github/mozartk/process-finder?branch=master'><img src='https://coveralls.io/repos/github/mozartk/process-finder/badge.svg?branch=master' alt='Coverage Status' /></a>
 <a href='https://opensource.org/licenses/MIT'><img src='https://img.shields.io/badge/License-MIT-green.svg' alt='License MIT' /></a>
 <a href='OJDDEV.md'><img src="https://img.shields.io/badge/OJD-mozartk-green.svg" alt="OJD" title="WE ARE OJD"></a>
 </p>

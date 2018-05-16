@@ -4,6 +4,8 @@
  * User: mozartk-mac
  * Date: 2018. 5. 16.
  * Time: PM 9:25
+ *
+ * Make the phpunit.xml file based on OS
  */
 
 function getOSFile(){
@@ -45,7 +47,7 @@ $newXml = str_replace("{{excludeTest}}", $excludeFile, $xml);
 
 file_put_contents(__DIR__."/".$targetXMLFiles, $newXml);
 
-echo "[processFinder]\nmake new test.xml...\n\n";
+echo "[processFinder]\nmake new ".$targetXMLFiles."...\n\n";
 echo "add OS files... \n";
 echo getOSFile();
 echo "\n\n";
