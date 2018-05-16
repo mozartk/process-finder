@@ -27,6 +27,7 @@ install:
 before_script:
     - mkdir -p build/logs
     - ls -al
+    - php defineTest.php
 
 # Testing the app (see phpunit.xml) for configs, generating Code Coverage report
 script:
